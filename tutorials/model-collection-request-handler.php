@@ -521,12 +521,15 @@ public function getOnSuccessMessageFor($service){
     return "";
 }
 </div>
-<p>Only the read service is supported, so we return "read" in getValidServices. validateArguments
+<p>Only the read service is supported, so we return "read" in getValidServices. The "read" method is already
+implemented in LudoDBCollection so we don't need to create a new "read" method inside our Countries class.</p>
+<p>validateArguments
 should return true only when number of arguments is 0 since our service does not require an arguments.
 The read service does not support any data either, so we return true from validateServiceData only when $data is empty.</p>
 <p>Finally, we return true from cacheEnabled and an empty string from getOnSuccessMessageFor. For LudoDBModels and
 LudoDBCollection classes, we can choose to not implement the getOnSuccessMessageFor method because it has it's default
 implementation in LudoDBObject which is parent class of LudoDBModel and LudoDBCollection.</p>
+
 <p>That's it. Countries is now a LudoDBService class. Let's move back to index.php. This is the code we have
 so far:</p>
 <div class="code code-pre">&lt;?php

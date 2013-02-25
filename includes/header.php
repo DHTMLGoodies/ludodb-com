@@ -21,7 +21,6 @@ $prefix = file_exists("index.php") ? '' : '../';
                 s.parentNode.insertBefore(ga, s);
             })();
         }
-
     </script>
 </head>
 <body>
