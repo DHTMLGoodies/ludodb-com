@@ -617,7 +617,7 @@ which parses url's and passes them to router.php. By opening the url http://your
 <h2>Use with LudoJS</h2>
 <p>LudoJS is a Javascript framework designed to work with LudoDB. To see the countries with LudoJS, take a look at
 <a href="countries.php">countries.php</a>.</p>
-    
+
 <?php
 require_once("../includes/footer.php");
 ?>

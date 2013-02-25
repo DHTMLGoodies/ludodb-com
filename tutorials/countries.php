@@ -1,3 +1,4 @@
+<p>Example of LudoDBCollection Countrires rendered inside a LudoJS tree.Tree class.</p>
 <?php
 require_once("../includes/header.php");
 ?>
