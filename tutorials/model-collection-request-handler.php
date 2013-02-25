@@ -2,11 +2,12 @@
 require_once("../includes/header.php");
 ?>
 <h1>Tutorial - Model, Collection and Request handler</h1>
-<p>In this tutorial, we will:</p>
+<p>This tutorial will show you to create a Web Service using LudoDB</p>
+<p>We will:</p>
 <ul>
     <li>Create LudoDB models for cities, states and countries.</li>
     <li>Create LudoDB collections for cities, states and countries.</li>
-    <li>Make the countries collection available as a web service.</li>
+    <li>Make the countries collection available as a Web Service.</li>
     <li>Create a simple front-end controller(index.php) which outputs the countries collection.</li>
 </ul>
 <p>At the end, we will be able to get countries, states and cities in this JSON tree structure when opening index.php:</p>

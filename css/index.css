@@ -11,6 +11,8 @@ body{
     margin-top:20px;
     height:100px;
     background-color:#232323;
+    border-top:1px solid #333;
+    border-bottom:1px solid #111;
 }
 
 img{border:0}
@@ -20,6 +22,7 @@ img{border:0}
     margin:0 auto;
     text-align:left;
     height:100px;
+    padding-left:20px;
 }
 
 .body{
@@ -39,6 +42,10 @@ a{
     color:#fff;
 }
 a:hover{
+    color:#abcc3a;
+}
+
+h1,h2,h3,h4{
     color:#abcc3a;
 }
 
