@@ -4,6 +4,7 @@ body{
     margin:0;
     padding:0;
     font-family:arial, sans-serif;
+    line-height:130%;
 }
 
 .heading{
@@ -12,11 +13,9 @@ body{
     background-color:#232323;
 }
 
-.logo{
-    background-image:url(../images/logo.png);
-    background-repeat: no-repeat;
+img{border:0}
 
-    background-position:top left;
+.logo{
     width:900px;
     margin:0 auto;
     text-align:left;
