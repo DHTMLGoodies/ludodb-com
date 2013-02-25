@@ -111,9 +111,10 @@ require_once("../includes/header.php");
             }
         ]
     }
-], "log":{
+],
+"log":{
     "time":0.025645017623901,
-            "queries":3
+    "queries":3
 }}
 </div>
 <h2>Preparation:</h2>

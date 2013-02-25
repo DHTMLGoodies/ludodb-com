@@ -48,7 +48,12 @@ a:hover{
 h1,h2,h3,h4{
     color:#abcc3a;
 }
-
+h4{
+    margin-bottom:0;
+}
+p{
+    margin-top:3px;
+}
 .code{
     font-family:courier, courier new, system, sans-serif, serif;
     padding:5px;
