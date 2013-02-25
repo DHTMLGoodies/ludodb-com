@@ -49,7 +49,9 @@ a:hover{
     font-size:13px;
     background-color:#191919;
 }
-
+.code-pre{
+    white-space:pre;
+}
 .footer{
     margin-top:20px;
     height:30px;
