@@ -15,12 +15,12 @@ require_once("../includes/header.php");
     "success":true,
         "message":"",
         "code":200,
-        "resource":"DemoCountries",
+        "resource":"Countries",
         "response":[
     {
         "id":"3",
         "name":"Germany",
-        "states\/counties":[
+        "states/counties":[
             {
                 "id":"5",
                 "name":"Bavaria",
@@ -37,7 +37,7 @@ require_once("../includes/header.php");
     {
         "id":"1",
         "name":"Norway",
-        "states\/counties":[
+        "states/counties":[
             {
                 "id":"2",
                 "name":"Hordaland",
@@ -73,7 +73,7 @@ require_once("../includes/header.php");
     {
         "id":"2",
         "name":"United States",
-        "states\/counties":[
+        "states/counties":[
             {
                 "id":"4",
                 "name":"California",
@@ -116,7 +116,7 @@ require_once("../includes/header.php");
 }}
 </div>
 <h2>Preparation:</h2>
-<p>You need access to a WebServer where PHP 5.3 or newer is installed.</p>
+<p>You need access to a WebServer with PHP 5.3 or newer.</p>
 <p>Create a new folder called cities.</p>
 <p>Download the LudoDB framework from <a href="https://github.com/DHTMLGoodies/ludoDB">GitHub</a> or clone it using
 git (command line from the cities folder): </p>
@@ -147,6 +147,7 @@ protected $config = array();
 protected $JSONConfig = true;
 </div>
 <p>And add a file called Country.json inside a sub folder named JSONConfig. The JSON should be a JSON encoded version of the PHP $config array.</p>
+<h3>Country.php</h3>
 <p>Now, let's configure the Country table. The first we specify is name of database table. Let's call it "country":</p>
 <div class="code code-pre">
 class Country extends LudoDBModel{
@@ -228,6 +229,7 @@ class Country extends LudoDBModel
 }
 </div>
 <p>And that's it for the Country class. </p>
+<h3>State.php</h3>
 <p>Now, let's move on to the State class. In our example, Texas in the United States, Rogaland in Norway and
     Bavaria in Germany, all represents states.</p>
 <p>For the State class will specify a config where "state" is the name of the database table. It should contain the
@@ -290,6 +292,7 @@ class State extends LudoDBModel
     );
 }
 </div>
+<h3>City.php</h3>
 <p>The last Class to create is City. The configuration of this table is the same as for State except that it has a
 state column referencing state(id) instead of a country column:</p>
 <div class="code code-pre">
@@ -339,6 +342,7 @@ class Cities extends LudoDBCollection
 }
 </div>
 <p>The LudoDBCollection class is also configured using the $config property or by JSON.</p>
+<h3>Citites.php</h3>
 <p>Let's start bulding the Cities collection(Cities.php). The sql should be</p>
 <div class="code">
 select * from city order by name
@@ -403,7 +407,12 @@ class States extends LudoDBCollection
 }
 </div>
 <p>We're almost done with the States collection now. The last thing we want to add to the config is "childKey" and "hideForeignKeys". </p>
-<p>childKey is a string which will be used as array key for the merged collection. By setting "childKeys" to </p>
+<p>childKey is a string which will be used as array key for the merged collection. By setting "childKey" to "cities", the Cities
+collection will be returned as a "cities" array("cities" => array()). </p>
+<p>ps! childKey can be defined globally on the config object for all merged collections, or inside the "merge" array, i.e. with "fk", "pk" and "class".</p>
+<p>"hideForeignKeys" is a boolean property which, when set to true will hide foreign keys in the merged collection, i.e. state property of city
+will not be shown.</p>
+<p>The final code for the States class now looks like this:</p>
 <div class="code code-pre">
 class States extends LudoDBCollection
 {
@@ -422,12 +431,15 @@ class States extends LudoDBCollection
     );
 }
 </div>
+<h3>Countries.php</h3>
+<p>The last collection we want to create is Countries. The configuration of this collection is the same as for States:</p>
 <div class="code code-pre">
 class Countries extends LudoDBCollection
 {
     protected $config = array(
         "sql" => "select * from country order by name",
         "childKey" => "states/counties",
+        "hideForeignKeys" => true,
         "merge" => array(
             array(
                 "class" => "States",
@@ -436,11 +448,160 @@ class Countries extends LudoDBCollection
             )
         )
     );
-
-
 }
 
 </div>
+<p>For now, this completes our LudoDBModel and LudoDBCollection classes. We have created 3 models and 3 collections. Since we
+are merging States into Countries and Citites into States, we will get both States and Cities when calling
+    the Countries::read method.</p>
+<p>Now, let's move on to index.php, our front end controller.</p>
+<h3>index.php</h3>
+<p>In index.php we want to create a LudoDBRequestHandler instance and use it to output the JSON for
+the Countries collection. </p>
+<p>The code for the request handler looks like this:</p>
+<div class="code code-pre">
+$handler = new LudoDBRequestHandler();
+echo $handler->handle("Countries/read");
+</div>
+<p>We create a LudoDBRequestHandler instance and call the handle method, passing the request we want to have processed.</p>
+<p>The argument to the handle method is in a web service format where tokens are separated by a slash(/).</p>
+<p>The first token is the name of the class or resource which the request should be delegated to. The lsat token("read") is the
+name of the service or more specific the name of the method which should handle the request.</p>
+<p>Any arguments in between the first and last are passed as constructor arguments to the resource, example:
+request: City/1/read will give you the data for City with id equals 1. </p>
+<h3>The LudoDBService interface</h3>
+<p>Resources handled by the LudoDBRequestHandler class has to implement the LudoDBService interface. The interface contains
+the following methods which has to be implemented.</p>
+<div class="code code-pre">
+public function validateArguments($service, $arguments);
+public function validateServiceData($service, $data);
+public function shouldCache($service);
+public function getValidServices();
+public function getOnSuccessMessageFor($service);
+</div>
+<ul>
+    <li><b>validateArguments</b> is used to validate arguments sent to the constructor of the resource class. When invalid,
+    you may return false or throw a LudoDBException exception. The name of the service and an array containing constructor
+    parameters are passed to this method.</li>
+    <li><b>validateServiceData</b> is used to validate eventual POST data($_POST['data']) which will be passed to the service method. As
+    for validateArguments, you can return false when invalid or throw a LudoDBException if you want to return an error message.</li>
+    <li><b>shouldCache</b> should return a boolean when the LudoDBRequest handler should try to get value from the ludo_db_cache
+    database table instead of passing the request to the resource. This is useful if a service requires a lot of database queries
+    to complete. </li>
+    <li><b>getValidServices</b> should return an array with the name of valid services, example return array("read");</li>
+    <li><b>getOnSuccessMessageFor</b> return default success messages for successful requests. Example: return "Data saved successfully";</li>
+</ul>
+<p>We need to implement these methods for our Countries collection. So re-open Countries.php and add the following code:</p>
+<div class="code code-pre">
+public function getValidServices(){
+    return array("read");
+}
+
+public function validateArguments($service, $arguments){
+    return count($arguments) === 0;
+}
+
+public function validateServiceData($service, $data){
+    return empty($data);
+}
+
+public function cacheEnabledFor($service){
+    return false;
+}
+
+public function getOnSuccessMessageFor($service){
+    return "";
+}
+</div>
+<p>Only the read service is supported, so we return "read" in getValidServices. validateArguments
+should return true only when number of arguments is 0 since our service does not require an arguments.
+The read service does not support any data either, so we return true from validateServiceData only when $data is empty.</p>
+<p>Finally, we return true from cacheEnabled and an empty string from getOnSuccessMessageFor. For LudoDBModels and
+LudoDBCollection classes, we can choose to not implement the getOnSuccessMessageFor method because it has it's default
+implementation in LudoDBObject which is parent class of LudoDBModel and LudoDBCollection.</p>
+<p>That's it. Countries is now a LudoDBService class. Let's move back to index.php. This is the code we have
+so far:</p>
+<div class="code code-pre">&lt;?php
+$handler = new LudoDBRequestHandler();
+echo $handler->handle("Countries/read");
+</div>
+<p>If you open index.php in your browser, you will see a blank screen or an error message. We need to include
+our PHP classes. Files can be included manually, or we can create an autoload.php file using the Autoload
+php PEAR plugin available at <a href="https://github.com/theseer/Autoload">https://github.com/theseer/Autoload</a>.
+<h4>Manual import</h4>
+<p>Use this code at the top of index.php to manually import the required php files:</p>
+<div class="code code-pre">
+require_once("ludoDB/autoload.php"); // Includes ludodb
+require_once(__DIR__ . "/Country.php");
+require_once(__DIR__ . "/City.php");
+require_once(__DIR__ . "/State.php");
+require_once(__DIR__ . "/Countries.php");
+require_once(__DIR__ . "/States.php");
+require_once(__DIR__ . "/Citites.php");
+</div>
+<h4>Import using theseer/Autoload:</h4>
+<p>Open a command line/shell and go to the citites folder. There type:</p>
+<div class="code code-pre">
+phpab -o autoload.php -e *Test* .
+</div>
+<p>Now, you only have to include autoload.php in index.php:</p>
+<div class="code code-pre">
+require_once(__DIR__ . "/autoload.php");
+</div>
+<h4>Specify database connection details.</h4>
+<p>The next thing we need to do inside index.php is to specify the database connection details. </p>
+<p>Example:</p>
+<div class="code code-pre">
+LudoDB::setDb("name_of_database");
+LudoDB::setUser("db_user_name");
+LudoDB::setPassword("db_password");
+LudoDB::setHost("localhost");
+</div>
+<p>Replace the values above with the connection details for your database.</p>
+<h4>Create database tables if not exists</h4>
+<p>For this demo, we want to make sure that the database tables are created. Usually, you will not
+have such code in your front end controller. So bear in mind this is for the demo only.</p>
+<p>This is the code used to create database tables when they doesn't exists:</p>
+<div class="code">
+$c = new Country();
+if (!$c->exists()) {
+    $util = new LudoDBUtility();
+    $util->dropAndCreate(array("State", "City", "Country"));
+}
+</div>
+<p>Finally, I call LudoDB::enableLogging(); to see number of queries and time used to process the requests in the response
+from LudoDBRequestHandler.</p>
+<p>The final code for index.php now looks like this:</p>
+<div class="code code-pre">&lt;?php
+require_once(__DIR__ . "//autoload.php");
+
+LudoDB::setDb("my_db");
+LudoDB::setUser("myUser");
+LudoDB::setPassword("myPassword");
+LudoDB::setHost("localhost");
+
+$c = new Country();
+if (!$c->exists()) {
+    $util = new LudoDBUtility();
+    $util->dropAndCreate(array("State", "City", "Country"));
+}
+
+
+LudoDB::enableLogging(); // get number of queries and server time in response
+
+$handler = new LudoDBRequestHandler();
+echo $handler->handle("Countries/read");
+
+</div>
+<p>If you open http://your-domain/path/to/citites/index.php, you should now get JSON for the Countries collection. To get a pretty
+view, open the page in Chrome or Firefox after installing a JSONView addon/extension.</p>
+<h2>Conclusion:</h2>
+<p>We have seen how to create LudoDBModel and LudoDBCollection classes. We have also taken a quick look at the
+LudoDBRequestHandler class.</p>
+<p>The code for this tutorial is also available inside the examples folder of the LudoDB repository(or zip). I will also suggest looking at the
+mod_rewrite code inside examples/mod_rewrite. Instead of a static index.php it has a dynamic router.php and a .htaccess file
+which parses url's and passes them to router.php. By opening the url http://yourdomian/path/to/mod_rewrite/Book/1/read in your browser.
+"Book/1/read" will be passed to Router.php which will pass the request to a LudoDBRequeestHandler instance and output the result.</p>
 <?php
 require_once("../includes/footer.php");
 ?>
