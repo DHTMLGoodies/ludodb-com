@@ -117,15 +117,21 @@ require_once("../includes/header.php");
 }}
 </div>
 <h2>Preparation:</h2>
+<h4>PHP</h4>
 <p>You need access to a WebServer with PHP 5.3 or newer.</p>
+<h4>Create root folder for the demo.</h4>
 <p>Create a new folder called cities.</p>
+<h4>Download LudoDB</h4>
 <p>Download the LudoDB framework from <a href="https://github.com/DHTMLGoodies/ludoDB">GitHub</a> or clone it using
 git (command line from the cities folder): </p>
 <div class="code">git clone https://github.com/DHTMLGoodies/ludoDB.git</div>
-<p>Put LudoDB inside cities/ludoDB. </p>
-<p>To use the PHP autoload builder available at <a href="https://github.com/theseer/Autoload">https://github.com/theseer/Autoload</a> is also recommended. It
-makes it easy to build one autoload file for the PHP files you'll have to include instead of using a lot of require or include statements.</p>
-<p>If you're having problems installing the autoload from the command line using pear install, I will suggest using this:</p>
+<p>LudoDB should be exracted into cities/ludoDB. </p>
+<h4>Autoload builder (Optional)</h4>
+<p>If you have the PHP Autoload builder available at <a href="https://github.com/theseer/Autoload">https://github.com/theseer/Autoload</a> installed,
+    it will make your work much easier. It will scan your directories and
+    create one single autoload.php file for you. Then you only need one require/include statement in your code
+    instead of one for each of the PHP files you'll need to include.</p>
+<p>If you're having problems installing Autoload from the command line using PEAR install, try this code:</p>
 <div class="code">
 pear config-set auto_discover 1<br>
 pear install -a -f pear.netpirates.net/Autoload
