@@ -117,7 +117,7 @@ require_once("../includes/header.php");
     "queries":3
 }}
 </div>
-<p>When viewed with LudoJS this JSON can be used to populate a tree like <a href="countries.php">this</a></p>
+<p>When viewed with LudoJS this JSON can be used to populate a tree like displayed in <a href="countries.php">countries.php</a></p>
 <h2>Preparation:</h2>
 <h4>PHP</h4>
 <p>You need access to a WebServer with PHP 5.3 or newer.</p>
@@ -615,7 +615,8 @@ mod_rewrite code inside examples/mod_rewrite. Instead of a static index.php it h
 which parses url's and passes them to router.php. By opening the url http://yourdomian/path/to/mod_rewrite/Book/1/read in your browser.
 "Book/1/read" will be passed to Router.php which will pass the request to a LudoDBRequeestHandler instance and output the result.</p>
 <h2>Use with LudoJS</h2>
-<p>LudoJS is a Javascript framework designed to work with LudoDB. If you download LudoJS you can create a tree.</p>
+<p>LudoJS is a Javascript framework designed to work with LudoDB. To see the countries with LudoJS, take a look at
+<a href="countries.php">countries.php</a>.</p>
 <?php
 require_once("../includes/footer.php");
 ?>
