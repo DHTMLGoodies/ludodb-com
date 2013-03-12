@@ -3,7 +3,7 @@ require_once("includes/header.php");
 ?>
 
         <p>LudoDB is a PHP framework providing an easy way to work with PHP database model objects and offer them as
-        Web Services.</p>
+        a Web Service.</p>
         <p>LudoDB with samples can be downloaded from:</p>
         <div class="code-line">
             <a href="https://github.com/DHTMLGoodies/ludoDB">https://github.com/DHTMLGoodies/ludoDB</a>
@@ -18,7 +18,7 @@ require_once("includes/header.php");
         <a href="https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/cities">https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/cities</a><br>
         <a href="https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/mod_rewrite">https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/mod_rewrite</a><br>
         </div>
-        <p>Tutorials:</p>
+        <h4>Tutorials:</h4>
         <p><a href="tutorials/model-collection-request-handler.php">Introduction into model, collections and request handlers.</a></p>
 
 
