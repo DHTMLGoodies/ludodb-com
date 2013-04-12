@@ -20,6 +20,10 @@ require_once("includes/header.php");
         <a href="https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/cities">https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/cities</a><br>
         <a href="https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/mod_rewrite">https://github.com/DHTMLGoodies/ludoDB/tree/master/examples/mod_rewrite</a><br>
         </div>
+        <p>And PHPDoc at:</p>
+            <div class="code">
+                <a href="ludodb/docs">http://ludodb.com/ludodb/docs</a><br>
+            </div>
         <h4>Tutorials:</h4>
         <p><a href="tutorials/model-collection-request-handler.php">Introduction into model, collections and request handlers.</a></p>
 
