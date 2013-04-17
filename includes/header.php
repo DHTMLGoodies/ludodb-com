@@ -5,6 +5,7 @@ $prefix = file_exists("index.php") ? '' : '../';
 <html>
 <head>
     <title>LudoDB - PHP Framework</title>
+    <link rel="icon" type="image/gif" href="<?php echo $prefix; ?>images/favicon.png" />
     <link rel="stylesheet" href="<?php echo $prefix; ?>css/index.css" type="text/css"/>
     <script type="text/javascript">
         if (location.hostname.indexOf('ludodb.com') >= 0) {
